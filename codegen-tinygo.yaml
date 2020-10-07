@@ -1,0 +1,15 @@
+schema: schema.widl
+parentDir: tinygo
+generates:
+  module/module.go:
+    package: widl-codegen/language/tinygo
+    visitorClass: ModuleVisitor
+    config:
+      package: module
+  main.go:
+    ifNotExists: true
+    package: widl-codegen/language/tinygo
+    visitorClass: ScaffoldVisitor
+    config:
+      import: github.com/wapc/languages-tests/tinygo/module
+      package: module
