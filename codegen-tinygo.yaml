@@ -11,5 +11,5 @@ generates:
     package: widl-codegen/language/tinygo
     visitorClass: ScaffoldVisitor
     config:
-      import: github.com/wapc/languages-tests/tinygo/module
+      import: github.com/wapc/language-tests/tinygo/module
       package: module

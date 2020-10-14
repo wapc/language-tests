@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/wapc/wapc-go"
 
-	"github.com/wapc/languages-tests/pkg/module"
+	"github.com/wapc/language-tests/pkg/module"
 )
 
 func TestTinyGo(t *testing.T) {

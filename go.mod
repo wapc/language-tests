@@ -1,4 +1,4 @@
-module github.com/wapc/languages-tests
+module github.com/wapc/language-tests
 
 go 1.15
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/wapc/languages-tests/tinygo/module"
+	"github.com/wapc/language-tests/tinygo/module"
 )
 
 func main() {
