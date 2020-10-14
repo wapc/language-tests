@@ -39,6 +39,18 @@ export class Host {
     const decoder = new Decoder(payload);
     return Tests.decode(decoder);
   }
+
+  testDecode(tests: Tests): string {
+    const payload = hostCall(
+      this.binding,
+      "tests",
+      "testDecode",
+      tests.toBuffer()
+    );
+    const decoder = new Decoder(payload);
+    const ret = decoder.readString();
+    return ret;
+  }
 }
 
 export class Handlers {
@@ -57,6 +69,11 @@ export class Handlers {
   static registerTestUnary(handler: (tests: Tests) => Tests): void {
     testUnaryHandler = handler;
     register("testUnary", testUnaryWrapper);
+  }
+
+  static registerTestDecode(handler: (tests: Tests) => string): void {
+    testDecodeHandler = handler;
+    register("testDecode", testDecodeWrapper);
   }
 }
 
@@ -86,6 +103,20 @@ function testUnaryWrapper(payload: ArrayBuffer): ArrayBuffer {
   request.decode(decoder);
   const response = testUnaryHandler(request);
   return response.toBuffer();
+}
+
+var testDecodeHandler: (tests: Tests) => string;
+function testDecodeWrapper(payload: ArrayBuffer): ArrayBuffer {
+  const decoder = new Decoder(payload);
+  const request = new Tests();
+  request.decode(decoder);
+  const response = testDecodeHandler(request);
+  const sizer = new Sizer();
+  sizer.writeString(response);
+  const ua = new ArrayBuffer(sizer.length);
+  const encoder = new Encoder(ua);
+  encoder.writeString(response);
+  return ua;
 }
 
 export class TestFunctionArgs {

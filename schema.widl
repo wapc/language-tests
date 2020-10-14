@@ -3,6 +3,7 @@ namespace "tests"
 interface {
   testFunction(required: Required, optional: Optional, maps: Maps, lists: Lists): Tests
   testUnary{tests: Tests}: Tests
+  testDecode{tests: Tests}: string
 }
 
 type Tests {

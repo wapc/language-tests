@@ -32,8 +32,8 @@ github.com/vmihailenco/msgpack/v5 v5.0.0-beta.1 h1:d71/KA0LhvkrJ/Ok+Wx9qK7bU8meK
 github.com/vmihailenco/msgpack/v5 v5.0.0-beta.1/go.mod h1:xlngVLeyQ/Qi05oQxhQ+oTuqa03RjMwMfk/7/TCs+QI=
 github.com/vmihailenco/tagparser v0.1.1 h1:quXMXlA39OCbd2wAdTsGDlK9RkOk6Wuw+x37wVyIuWY=
 github.com/vmihailenco/tagparser v0.1.1/go.mod h1:OeAg3pn3UbLjkWt+rN9oFYB6u/cQgqMEUPoW2WPyhdI=
-github.com/wapc/tinygo-msgpack v0.0.0-20201004155212-f0f03e2cfcf2 h1:0VHj2JE+qF/sHgb+z0JXEtGBOvGD1A7lO9sydEpIhKs=
-github.com/wapc/tinygo-msgpack v0.0.0-20201004155212-f0f03e2cfcf2/go.mod h1:CbN2ExtOTJQdQKba6S/kSV1IkDXuHK1GzDBft7ak7zM=
+github.com/wapc/tinygo-msgpack v0.0.0-20201004232015-72bdaea6b0f3 h1:7xwd5YE1937SZSAdvTVtnQLk30wvPKy0n5i0xizGZy8=
+github.com/wapc/tinygo-msgpack v0.0.0-20201004232015-72bdaea6b0f3/go.mod h1:CbN2ExtOTJQdQKba6S/kSV1IkDXuHK1GzDBft7ak7zM=
 github.com/wapc/wapc-go v0.2.1 h1:SGKGXm1OEplKl+xWyJNvRkDVhF9fbwz0K5BdHDcG8YI=
 github.com/wapc/wapc-go v0.2.1/go.mod h1:cWa/DMFUTFsq1cutKj119zP+eua5lWOEV+MxOIyBqKA=
 github.com/wapc/wapc-guest-tinygo v0.3.1-0.20201004151320-30e64592db53 h1:pwLriJaYbwEIjAYRXhMvucWa8Me8yuZb968mE0t1fd8=

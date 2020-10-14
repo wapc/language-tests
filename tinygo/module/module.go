@@ -44,9 +44,20 @@ func (h *Host) TestUnary(tests Tests) (Tests, error) {
 	return DecodeTests(&decoder)
 }
 
+func (h *Host) TestDecode(tests Tests) (string, error) {
+	payload, err := wapc.HostCall(h.binding, "tests", "testDecode", tests.ToBuffer())
+	if err != nil {
+		return "", err
+	}
+	decoder := msgpack.NewDecoder(payload)
+	ret, err := decoder.ReadString()
+	return ret, err
+}
+
 type Handlers struct {
 	TestFunction func(required Required, optional Optional, maps Maps, lists Lists) (Tests, error)
 	TestUnary    func(tests Tests) (Tests, error)
+	TestDecode   func(tests Tests) (string, error)
 }
 
 func (h Handlers) Register() {
@@ -58,11 +69,16 @@ func (h Handlers) Register() {
 		testUnaryHandler = h.TestUnary
 		wapc.RegisterFunction("testUnary", testUnaryWrapper)
 	}
+	if h.TestDecode != nil {
+		testDecodeHandler = h.TestDecode
+		wapc.RegisterFunction("testDecode", testDecodeWrapper)
+	}
 }
 
 var (
 	testFunctionHandler func(required Required, optional Optional, maps Maps, lists Lists) (Tests, error)
 	testUnaryHandler    func(tests Tests) (Tests, error)
+	testDecodeHandler   func(tests Tests) (string, error)
 )
 
 func testFunctionWrapper(payload []byte) ([]byte, error) {
@@ -85,6 +101,24 @@ func testUnaryWrapper(payload []byte) ([]byte, error) {
 		return nil, err
 	}
 	return response.ToBuffer(), nil
+}
+
+func testDecodeWrapper(payload []byte) ([]byte, error) {
+	decoder := msgpack.NewDecoder(payload)
+	var request Tests
+	request.Decode(&decoder)
+	response, err := testDecodeHandler(request)
+	if err != nil {
+		return nil, err
+	}
+	var sizer msgpack.Sizer
+	sizer.WriteString(response)
+
+	ua := make([]byte, sizer.Len())
+	encoder := msgpack.NewEncoder(ua)
+	encoder.WriteString(response)
+
+	return ua, nil
 }
 
 type TestFunctionArgs struct {

@@ -55,6 +55,20 @@ func (m *Module) TestUnary(ctx context.Context, tests Tests) (Tests, error) {
 	return ret, err
 }
 
+func (m *Module) TestDecode(ctx context.Context, tests Tests) (string, error) {
+	var ret string
+	inputPayload, err := msgpack.Marshal(&tests)
+	if err != nil {
+		return ret, err
+	}
+	payload, err := m.instance.Invoke(ctx, "testDecode", inputPayload)
+	if err != nil {
+		return ret, err
+	}
+	err = msgpack.Unmarshal(payload, &ret)
+	return ret, err
+}
+
 type TestFunctionArgs struct {
 	Required Required `msgpack:"required"`
 	Optional Optional `msgpack:"optional"`

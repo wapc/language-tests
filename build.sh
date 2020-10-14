@@ -1,4 +1,5 @@
 #!/bin/sh
+wapc generate codegen-go.yaml
 
 echo "Building AssemblyScript module"
 wapc generate codegen-as.yaml

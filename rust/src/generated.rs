@@ -69,6 +69,15 @@ impl Host {
             })
             .map_err(|e| e.into())
     }
+
+    pub fn test_decode(&self, tests: Tests) -> HandlerResult<String> {
+        host_call(&self.binding, "tests", "testDecode", &serialize(tests)?)
+            .map(|vec| {
+                let resp = deserialize::<String>(vec.as_ref()).unwrap();
+                resp
+            })
+            .map_err(|e| e.into())
+    }
 }
 
 pub struct Handlers {}
@@ -82,12 +91,17 @@ impl Handlers {
         *TEST_UNARY.write().unwrap() = Some(f);
         register_function(&"testUnary", test_unary_wrapper);
     }
+    pub fn register_test_decode(f: fn(Tests) -> HandlerResult<String>) {
+        *TEST_DECODE.write().unwrap() = Some(f);
+        register_function(&"testDecode", test_decode_wrapper);
+    }
 }
 
 lazy_static! {
     static ref TEST_FUNCTION: RwLock<Option<fn(Required, Optional, Maps, Lists) -> HandlerResult<Tests>>> =
         RwLock::new(None);
     static ref TEST_UNARY: RwLock<Option<fn(Tests) -> HandlerResult<Tests>>> = RwLock::new(None);
+    static ref TEST_DECODE: RwLock<Option<fn(Tests) -> HandlerResult<String>>> = RwLock::new(None);
 }
 
 fn test_function_wrapper(input_payload: &[u8]) -> CallResult {
@@ -100,6 +114,13 @@ fn test_function_wrapper(input_payload: &[u8]) -> CallResult {
 fn test_unary_wrapper(input_payload: &[u8]) -> CallResult {
     let input = deserialize::<Tests>(input_payload)?;
     let lock = TEST_UNARY.read().unwrap().unwrap();
+    let result = lock(input)?;
+    Ok(serialize(result)?)
+}
+
+fn test_decode_wrapper(input_payload: &[u8]) -> CallResult {
+    let input = deserialize::<Tests>(input_payload)?;
+    let lock = TEST_DECODE.read().unwrap().unwrap();
     let result = lock(input)?;
     Ok(serialize(result)?)
 }
