@@ -125,7 +125,7 @@ fn test_decode_wrapper(input_payload: &[u8]) -> CallResult {
     Ok(serialize(result)?)
 }
 
-#[derive(Debug, PartialEq, Deserialize, Serialize, Default)]
+#[derive(Debug, PartialEq, Deserialize, Serialize, Default, Clone)]
 pub struct TestFunctionArgs {
     #[serde(rename = "required")]
     pub required: Required,
@@ -137,7 +137,7 @@ pub struct TestFunctionArgs {
     pub lists: Lists,
 }
 
-#[derive(Debug, PartialEq, Deserialize, Serialize, Default)]
+#[derive(Debug, PartialEq, Deserialize, Serialize, Default, Clone)]
 pub struct Tests {
     #[serde(rename = "required")]
     pub required: Required,
@@ -149,7 +149,7 @@ pub struct Tests {
     pub lists: Lists,
 }
 
-#[derive(Debug, PartialEq, Deserialize, Serialize, Default)]
+#[derive(Debug, PartialEq, Deserialize, Serialize, Default, Clone)]
 pub struct Required {
     #[serde(rename = "boolValue")]
     pub bool_value: bool,
@@ -182,7 +182,7 @@ pub struct Required {
     pub object_value: Thing,
 }
 
-#[derive(Debug, PartialEq, Deserialize, Serialize, Default)]
+#[derive(Debug, PartialEq, Deserialize, Serialize, Default, Clone)]
 pub struct Optional {
     #[serde(rename = "boolValue")]
     pub bool_value: Option<bool>,
@@ -215,7 +215,7 @@ pub struct Optional {
     pub object_value: Option<Thing>,
 }
 
-#[derive(Debug, PartialEq, Deserialize, Serialize, Default)]
+#[derive(Debug, PartialEq, Deserialize, Serialize, Default, Clone)]
 pub struct Maps {
     #[serde(rename = "mapStringPrimative")]
     pub map_string_primative: std::collections::HashMap<u32, String>,
@@ -223,7 +223,7 @@ pub struct Maps {
     pub map_u64_primative: std::collections::HashMap<u32, u64>,
 }
 
-#[derive(Debug, PartialEq, Deserialize, Serialize, Default)]
+#[derive(Debug, PartialEq, Deserialize, Serialize, Default, Clone)]
 pub struct Lists {
     #[serde(rename = "listStrings")]
     pub list_strings: Vec<String>,
@@ -235,7 +235,7 @@ pub struct Lists {
     pub list_objects_optional: Vec<Option<Thing>>,
 }
 
-#[derive(Debug, PartialEq, Deserialize, Serialize, Default)]
+#[derive(Debug, PartialEq, Deserialize, Serialize, Default, Clone)]
 pub struct Thing {
     #[serde(rename = "value")]
     pub value: String,
@@ -244,7 +244,9 @@ pub struct Thing {
 /// The standard function for serializing codec structs into a format that can be
 /// used for message exchange between actor and host. Use of any other function to
 /// serialize could result in breaking incompatibilities.
-fn serialize<T>(item: T) -> ::std::result::Result<Vec<u8>, Box<dyn std::error::Error + Send + Sync>>
+pub fn serialize<T>(
+    item: T,
+) -> ::std::result::Result<Vec<u8>, Box<dyn std::error::Error + Send + Sync>>
 where
     T: Serialize,
 {
@@ -256,7 +258,7 @@ where
 /// The standard function for de-serializing codec structs from a format suitable
 /// for message exchange between actor and host. Use of any other function to
 /// deserialize could result in breaking incompatibilities.
-fn deserialize<'de, T: Deserialize<'de>>(
+pub fn deserialize<'de, T: Deserialize<'de>>(
     buf: &[u8],
 ) -> ::std::result::Result<T, Box<dyn std::error::Error + Send + Sync>> {
     let mut de = Deserializer::new(Cursor::new(buf));

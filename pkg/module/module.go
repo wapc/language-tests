@@ -3,7 +3,7 @@ package module
 import (
 	"context"
 
-	"github.com/vmihailenco/msgpack/v5"
+	"github.com/vmihailenco/msgpack/v4"
 	"github.com/wapc/wapc-go"
 )
 

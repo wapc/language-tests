@@ -174,26 +174,10 @@ func (o *TestFunctionArgs) Decode(decoder *msgpack.Decoder) error {
 	return nil
 }
 
-func (o *TestFunctionArgs) Size(sizer *msgpack.Sizer) {
-	if o == nil {
-		sizer.WriteNil()
-		return
-	}
-	sizer.WriteMapSize(4)
-	sizer.WriteString("required")
-	o.Required.Size(sizer)
-	sizer.WriteString("optional")
-	o.Optional.Size(sizer)
-	sizer.WriteString("maps")
-	o.Maps.Size(sizer)
-	sizer.WriteString("lists")
-	o.Lists.Size(sizer)
-}
-
-func (o *TestFunctionArgs) Encode(encoder *msgpack.Encoder) {
+func (o *TestFunctionArgs) Encode(encoder msgpack.Writer) error {
 	if o == nil {
 		encoder.WriteNil()
-		return
+		return nil
 	}
 	encoder.WriteMapSize(4)
 	encoder.WriteString("required")
@@ -204,11 +188,13 @@ func (o *TestFunctionArgs) Encode(encoder *msgpack.Encoder) {
 	o.Maps.Encode(encoder)
 	encoder.WriteString("lists")
 	o.Lists.Encode(encoder)
+
+	return nil
 }
 
 func (o *TestFunctionArgs) ToBuffer() []byte {
 	var sizer msgpack.Sizer
-	o.Size(&sizer)
+	o.Encode(&sizer)
 	buffer := make([]byte, sizer.Len())
 	encoder := msgpack.NewEncoder(buffer)
 	o.Encode(&encoder)
@@ -268,26 +254,10 @@ func (o *Tests) Decode(decoder *msgpack.Decoder) error {
 	return nil
 }
 
-func (o *Tests) Size(sizer *msgpack.Sizer) {
-	if o == nil {
-		sizer.WriteNil()
-		return
-	}
-	sizer.WriteMapSize(4)
-	sizer.WriteString("required")
-	o.Required.Size(sizer)
-	sizer.WriteString("optional")
-	o.Optional.Size(sizer)
-	sizer.WriteString("maps")
-	o.Maps.Size(sizer)
-	sizer.WriteString("lists")
-	o.Lists.Size(sizer)
-}
-
-func (o *Tests) Encode(encoder *msgpack.Encoder) {
+func (o *Tests) Encode(encoder msgpack.Writer) error {
 	if o == nil {
 		encoder.WriteNil()
-		return
+		return nil
 	}
 	encoder.WriteMapSize(4)
 	encoder.WriteString("required")
@@ -298,11 +268,13 @@ func (o *Tests) Encode(encoder *msgpack.Encoder) {
 	o.Maps.Encode(encoder)
 	encoder.WriteString("lists")
 	o.Lists.Encode(encoder)
+
+	return nil
 }
 
 func (o *Tests) ToBuffer() []byte {
 	var sizer msgpack.Sizer
-	o.Size(&sizer)
+	o.Encode(&sizer)
 	buffer := make([]byte, sizer.Len())
 	encoder := msgpack.NewEncoder(buffer)
 	o.Encode(&encoder)
@@ -392,46 +364,10 @@ func (o *Required) Decode(decoder *msgpack.Decoder) error {
 	return nil
 }
 
-func (o *Required) Size(sizer *msgpack.Sizer) {
-	if o == nil {
-		sizer.WriteNil()
-		return
-	}
-	sizer.WriteMapSize(14)
-	sizer.WriteString("boolValue")
-	sizer.WriteBool(o.BoolValue)
-	sizer.WriteString("u8Value")
-	sizer.WriteUint8(o.U8Value)
-	sizer.WriteString("u16Value")
-	sizer.WriteUint16(o.U16Value)
-	sizer.WriteString("u32Value")
-	sizer.WriteUint32(o.U32Value)
-	sizer.WriteString("u64Value")
-	sizer.WriteUint64(o.U64Value)
-	sizer.WriteString("s8Value")
-	sizer.WriteInt8(o.S8Value)
-	sizer.WriteString("s16Value")
-	sizer.WriteInt16(o.S16Value)
-	sizer.WriteString("s32Value")
-	sizer.WriteInt32(o.S32Value)
-	sizer.WriteString("s64Value")
-	sizer.WriteInt64(o.S64Value)
-	sizer.WriteString("f32Value")
-	sizer.WriteFloat32(o.F32Value)
-	sizer.WriteString("f64Value")
-	sizer.WriteFloat64(o.F64Value)
-	sizer.WriteString("stringValue")
-	sizer.WriteString(o.StringValue)
-	sizer.WriteString("bytesValue")
-	sizer.WriteByteArray(o.BytesValue)
-	sizer.WriteString("objectValue")
-	o.ObjectValue.Size(sizer)
-}
-
-func (o *Required) Encode(encoder *msgpack.Encoder) {
+func (o *Required) Encode(encoder msgpack.Writer) error {
 	if o == nil {
 		encoder.WriteNil()
-		return
+		return nil
 	}
 	encoder.WriteMapSize(14)
 	encoder.WriteString("boolValue")
@@ -462,11 +398,13 @@ func (o *Required) Encode(encoder *msgpack.Encoder) {
 	encoder.WriteByteArray(o.BytesValue)
 	encoder.WriteString("objectValue")
 	o.ObjectValue.Encode(encoder)
+
+	return nil
 }
 
 func (o *Required) ToBuffer() []byte {
 	var sizer msgpack.Sizer
-	o.Size(&sizer)
+	o.Encode(&sizer)
 	buffer := make([]byte, sizer.Len())
 	encoder := msgpack.NewEncoder(buffer)
 	o.Encode(&encoder)
@@ -682,102 +620,10 @@ func (o *Optional) Decode(decoder *msgpack.Decoder) error {
 	return nil
 }
 
-func (o *Optional) Size(sizer *msgpack.Sizer) {
-	if o == nil {
-		sizer.WriteNil()
-		return
-	}
-	sizer.WriteMapSize(14)
-	sizer.WriteString("boolValue")
-	if o.BoolValue == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteBool(*o.BoolValue)
-	}
-	sizer.WriteString("u8Value")
-	if o.U8Value == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteUint8(*o.U8Value)
-	}
-	sizer.WriteString("u16Value")
-	if o.U16Value == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteUint16(*o.U16Value)
-	}
-	sizer.WriteString("u32Value")
-	if o.U32Value == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteUint32(*o.U32Value)
-	}
-	sizer.WriteString("u64Value")
-	if o.U64Value == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteUint64(*o.U64Value)
-	}
-	sizer.WriteString("s8Value")
-	if o.S8Value == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteInt8(*o.S8Value)
-	}
-	sizer.WriteString("s16Value")
-	if o.S16Value == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteInt16(*o.S16Value)
-	}
-	sizer.WriteString("s32Value")
-	if o.S32Value == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteInt32(*o.S32Value)
-	}
-	sizer.WriteString("s64Value")
-	if o.S64Value == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteInt64(*o.S64Value)
-	}
-	sizer.WriteString("f32Value")
-	if o.F32Value == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteFloat32(*o.F32Value)
-	}
-	sizer.WriteString("f64Value")
-	if o.F64Value == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteFloat64(*o.F64Value)
-	}
-	sizer.WriteString("stringValue")
-	if o.StringValue == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteString(*o.StringValue)
-	}
-	sizer.WriteString("bytesValue")
-	if o.BytesValue == nil {
-		sizer.WriteNil()
-	} else {
-		sizer.WriteByteArray(o.BytesValue)
-	}
-	sizer.WriteString("objectValue")
-	if o.ObjectValue == nil {
-		sizer.WriteNil()
-	} else {
-		o.ObjectValue.Size(sizer)
-	}
-}
-
-func (o *Optional) Encode(encoder *msgpack.Encoder) {
+func (o *Optional) Encode(encoder msgpack.Writer) error {
 	if o == nil {
 		encoder.WriteNil()
-		return
+		return nil
 	}
 	encoder.WriteMapSize(14)
 	encoder.WriteString("boolValue")
@@ -864,11 +710,13 @@ func (o *Optional) Encode(encoder *msgpack.Encoder) {
 	} else {
 		o.ObjectValue.Encode(encoder)
 	}
+
+	return nil
 }
 
 func (o *Optional) ToBuffer() []byte {
 	var sizer msgpack.Sizer
-	o.Size(&sizer)
+	o.Encode(&sizer)
 	buffer := make([]byte, sizer.Len())
 	encoder := msgpack.NewEncoder(buffer)
 	o.Encode(&encoder)
@@ -954,34 +802,10 @@ func (o *Maps) Decode(decoder *msgpack.Decoder) error {
 	return nil
 }
 
-func (o *Maps) Size(sizer *msgpack.Sizer) {
-	if o == nil {
-		sizer.WriteNil()
-		return
-	}
-	sizer.WriteMapSize(2)
-	sizer.WriteString("mapStringPrimative")
-	sizer.WriteMapSize(uint32(len(o.MapStringPrimative)))
-	if o.MapStringPrimative != nil { // TinyGo bug: ranging over nil maps panics.
-		for k, v := range o.MapStringPrimative {
-			sizer.WriteUint32(k)
-			sizer.WriteString(v)
-		}
-	}
-	sizer.WriteString("mapU64Primative")
-	sizer.WriteMapSize(uint32(len(o.MapU64Primative)))
-	if o.MapU64Primative != nil { // TinyGo bug: ranging over nil maps panics.
-		for k, v := range o.MapU64Primative {
-			sizer.WriteUint32(k)
-			sizer.WriteUint64(v)
-		}
-	}
-}
-
-func (o *Maps) Encode(encoder *msgpack.Encoder) {
+func (o *Maps) Encode(encoder msgpack.Writer) error {
 	if o == nil {
 		encoder.WriteNil()
-		return
+		return nil
 	}
 	encoder.WriteMapSize(2)
 	encoder.WriteString("mapStringPrimative")
@@ -1000,11 +824,13 @@ func (o *Maps) Encode(encoder *msgpack.Encoder) {
 			encoder.WriteUint64(v)
 		}
 	}
+
+	return nil
 }
 
 func (o *Maps) ToBuffer() []byte {
 	var sizer msgpack.Sizer
-	o.Size(&sizer)
+	o.Encode(&sizer)
 	buffer := make([]byte, sizer.Len())
 	encoder := msgpack.NewEncoder(buffer)
 	o.Encode(&encoder)
@@ -1125,42 +951,10 @@ func (o *Lists) Decode(decoder *msgpack.Decoder) error {
 	return nil
 }
 
-func (o *Lists) Size(sizer *msgpack.Sizer) {
-	if o == nil {
-		sizer.WriteNil()
-		return
-	}
-	sizer.WriteMapSize(4)
-	sizer.WriteString("listStrings")
-	sizer.WriteArraySize(uint32(len(o.ListStrings)))
-	for _, v := range o.ListStrings {
-		sizer.WriteString(v)
-	}
-	sizer.WriteString("listU64s")
-	sizer.WriteArraySize(uint32(len(o.ListU64s)))
-	for _, v := range o.ListU64s {
-		sizer.WriteUint64(v)
-	}
-	sizer.WriteString("listObjects")
-	sizer.WriteArraySize(uint32(len(o.ListObjects)))
-	for _, v := range o.ListObjects {
-		v.Size(sizer)
-	}
-	sizer.WriteString("listObjectsOptional")
-	sizer.WriteArraySize(uint32(len(o.ListObjectsOptional)))
-	for _, v := range o.ListObjectsOptional {
-		if v == nil {
-			sizer.WriteNil()
-		} else {
-			v.Size(sizer)
-		}
-	}
-}
-
-func (o *Lists) Encode(encoder *msgpack.Encoder) {
+func (o *Lists) Encode(encoder msgpack.Writer) error {
 	if o == nil {
 		encoder.WriteNil()
-		return
+		return nil
 	}
 	encoder.WriteMapSize(4)
 	encoder.WriteString("listStrings")
@@ -1187,11 +981,13 @@ func (o *Lists) Encode(encoder *msgpack.Encoder) {
 			v.Encode(encoder)
 		}
 	}
+
+	return nil
 }
 
 func (o *Lists) ToBuffer() []byte {
 	var sizer msgpack.Sizer
-	o.Size(&sizer)
+	o.Encode(&sizer)
 	buffer := make([]byte, sizer.Len())
 	encoder := msgpack.NewEncoder(buffer)
 	o.Encode(&encoder)
@@ -1242,29 +1038,21 @@ func (o *Thing) Decode(decoder *msgpack.Decoder) error {
 	return nil
 }
 
-func (o *Thing) Size(sizer *msgpack.Sizer) {
-	if o == nil {
-		sizer.WriteNil()
-		return
-	}
-	sizer.WriteMapSize(1)
-	sizer.WriteString("value")
-	sizer.WriteString(o.Value)
-}
-
-func (o *Thing) Encode(encoder *msgpack.Encoder) {
+func (o *Thing) Encode(encoder msgpack.Writer) error {
 	if o == nil {
 		encoder.WriteNil()
-		return
+		return nil
 	}
 	encoder.WriteMapSize(1)
 	encoder.WriteString("value")
 	encoder.WriteString(o.Value)
+
+	return nil
 }
 
 func (o *Thing) ToBuffer() []byte {
 	var sizer msgpack.Sizer
-	o.Size(&sizer)
+	o.Encode(&sizer)
 	buffer := make([]byte, sizer.Len())
 	encoder := msgpack.NewEncoder(buffer)
 	o.Encode(&encoder)

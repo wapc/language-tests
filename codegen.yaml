@@ -17,7 +17,6 @@ generates:
       package: './module'
 ---
 schema: schema.widl
-#https://raw.githubusercontent.com/wascc/wascc-actor-as/master/kv.widl
 parentDir: rust
 generates:
   src/generated.rs:
