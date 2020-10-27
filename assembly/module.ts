@@ -1,4 +1,4 @@
-import { Decoder, Encoder, Sizer, Value } from "as-msgpack";
+import { Decoder, Writer, Encoder, Sizer, Value } from "@wapc/as-msgpack";
 import { register, hostCall } from "wapc-guest-as";
 
 export class Host {
@@ -158,19 +158,7 @@ export class TestFunctionArgs {
     }
   }
 
-  size(sizer: Sizer): void {
-    sizer.writeMapSize(4);
-    sizer.writeString("required");
-    this.required.size(sizer);
-    sizer.writeString("optional");
-    this.optional.size(sizer);
-    sizer.writeString("maps");
-    this.maps.size(sizer);
-    sizer.writeString("lists");
-    this.lists.size(sizer);
-  }
-
-  encode(encoder: Encoder): void {
+  encode(encoder: Writer): void {
     encoder.writeMapSize(4);
     encoder.writeString("required");
     this.required.encode(encoder);
@@ -184,7 +172,7 @@ export class TestFunctionArgs {
 
   toBuffer(): ArrayBuffer {
     let sizer = new Sizer();
-    this.size(sizer);
+    this.encode(sizer);
     let buffer = new ArrayBuffer(sizer.length);
     let encoder = new Encoder(buffer);
     this.encode(encoder);
@@ -231,19 +219,7 @@ export class Tests {
     }
   }
 
-  size(sizer: Sizer): void {
-    sizer.writeMapSize(4);
-    sizer.writeString("required");
-    this.required.size(sizer);
-    sizer.writeString("optional");
-    this.optional.size(sizer);
-    sizer.writeString("maps");
-    this.maps.size(sizer);
-    sizer.writeString("lists");
-    this.lists.size(sizer);
-  }
-
-  encode(encoder: Encoder): void {
+  encode(encoder: Writer): void {
     encoder.writeMapSize(4);
     encoder.writeString("required");
     this.required.encode(encoder);
@@ -257,7 +233,7 @@ export class Tests {
 
   toBuffer(): ArrayBuffer {
     let sizer = new Sizer();
-    this.size(sizer);
+    this.encode(sizer);
     let buffer = new ArrayBuffer(sizer.length);
     let encoder = new Encoder(buffer);
     this.encode(encoder);
@@ -366,39 +342,7 @@ export class Required {
     }
   }
 
-  size(sizer: Sizer): void {
-    sizer.writeMapSize(14);
-    sizer.writeString("boolValue");
-    sizer.writeBool(this.boolValue);
-    sizer.writeString("u8Value");
-    sizer.writeUInt8(this.u8Value);
-    sizer.writeString("u16Value");
-    sizer.writeUInt16(this.u16Value);
-    sizer.writeString("u32Value");
-    sizer.writeUInt32(this.u32Value);
-    sizer.writeString("u64Value");
-    sizer.writeUInt64(this.u64Value);
-    sizer.writeString("s8Value");
-    sizer.writeInt8(this.s8Value);
-    sizer.writeString("s16Value");
-    sizer.writeInt16(this.s16Value);
-    sizer.writeString("s32Value");
-    sizer.writeInt32(this.s32Value);
-    sizer.writeString("s64Value");
-    sizer.writeInt64(this.s64Value);
-    sizer.writeString("f32Value");
-    sizer.writeFloat32(this.f32Value);
-    sizer.writeString("f64Value");
-    sizer.writeFloat64(this.f64Value);
-    sizer.writeString("stringValue");
-    sizer.writeString(this.stringValue);
-    sizer.writeString("bytesValue");
-    sizer.writeByteArray(this.bytesValue);
-    sizer.writeString("objectValue");
-    this.objectValue.size(sizer);
-  }
-
-  encode(encoder: Encoder): void {
+  encode(encoder: Writer): void {
     encoder.writeMapSize(14);
     encoder.writeString("boolValue");
     encoder.writeBool(this.boolValue);
@@ -432,7 +376,7 @@ export class Required {
 
   toBuffer(): ArrayBuffer {
     let sizer = new Sizer();
-    this.size(sizer);
+    this.encode(sizer);
     let buffer = new ArrayBuffer(sizer.length);
     let encoder = new Encoder(buffer);
     this.encode(encoder);
@@ -647,109 +591,7 @@ export class Optional {
     }
   }
 
-  size(sizer: Sizer): void {
-    sizer.writeMapSize(14);
-    sizer.writeString("boolValue");
-    if (this.boolValue === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.boolValue!;
-      sizer.writeBool(unboxed.value);
-    }
-    sizer.writeString("u8Value");
-    if (this.u8Value === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.u8Value!;
-      sizer.writeUInt8(unboxed.value);
-    }
-    sizer.writeString("u16Value");
-    if (this.u16Value === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.u16Value!;
-      sizer.writeUInt16(unboxed.value);
-    }
-    sizer.writeString("u32Value");
-    if (this.u32Value === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.u32Value!;
-      sizer.writeUInt32(unboxed.value);
-    }
-    sizer.writeString("u64Value");
-    if (this.u64Value === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.u64Value!;
-      sizer.writeUInt64(unboxed.value);
-    }
-    sizer.writeString("s8Value");
-    if (this.s8Value === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.s8Value!;
-      sizer.writeInt8(unboxed.value);
-    }
-    sizer.writeString("s16Value");
-    if (this.s16Value === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.s16Value!;
-      sizer.writeInt16(unboxed.value);
-    }
-    sizer.writeString("s32Value");
-    if (this.s32Value === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.s32Value!;
-      sizer.writeInt32(unboxed.value);
-    }
-    sizer.writeString("s64Value");
-    if (this.s64Value === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.s64Value!;
-      sizer.writeInt64(unboxed.value);
-    }
-    sizer.writeString("f32Value");
-    if (this.f32Value === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.f32Value!;
-      sizer.writeFloat32(unboxed.value);
-    }
-    sizer.writeString("f64Value");
-    if (this.f64Value === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.f64Value!;
-      sizer.writeFloat64(unboxed.value);
-    }
-    sizer.writeString("stringValue");
-    if (this.stringValue === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.stringValue!;
-      sizer.writeString(unboxed.value);
-    }
-    sizer.writeString("bytesValue");
-    if (this.bytesValue === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.bytesValue!;
-      sizer.writeByteArray(unboxed);
-    }
-    sizer.writeString("objectValue");
-    if (this.objectValue === null) {
-      sizer.writeNil();
-    } else {
-      const unboxed = this.objectValue!;
-      unboxed.size(sizer);
-    }
-  }
-
-  encode(encoder: Encoder): void {
+  encode(encoder: Writer): void {
     encoder.writeMapSize(14);
     encoder.writeString("boolValue");
     if (this.boolValue === null) {
@@ -853,7 +695,7 @@ export class Optional {
 
   toBuffer(): ArrayBuffer {
     let sizer = new Sizer();
-    this.size(sizer);
+    this.encode(sizer);
     let buffer = new ArrayBuffer(sizer.length);
     let encoder = new Encoder(buffer);
     this.encode(encoder);
@@ -990,49 +832,25 @@ export class Maps {
     }
   }
 
-  size(sizer: Sizer): void {
-    sizer.writeMapSize(2);
-    sizer.writeString("mapStringPrimative");
-    sizer.writeMap(
-      this.mapStringPrimative,
-      (sizer: Sizer, key: u32): void => {
-        sizer.writeUInt32(key);
-      },
-      (sizer: Sizer, value: string): void => {
-        sizer.writeString(value);
-      }
-    );
-    sizer.writeString("mapU64Primative");
-    sizer.writeMap(
-      this.mapU64Primative,
-      (sizer: Sizer, key: u32): void => {
-        sizer.writeUInt32(key);
-      },
-      (sizer: Sizer, value: u64): void => {
-        sizer.writeUInt64(value);
-      }
-    );
-  }
-
-  encode(encoder: Encoder): void {
+  encode(encoder: Writer): void {
     encoder.writeMapSize(2);
     encoder.writeString("mapStringPrimative");
     encoder.writeMap(
       this.mapStringPrimative,
-      (encoder: Encoder, key: u32): void => {
+      (encoder: Writer, key: u32): void => {
         encoder.writeUInt32(key);
       },
-      (encoder: Encoder, value: string): void => {
+      (encoder: Writer, value: string): void => {
         encoder.writeString(value);
       }
     );
     encoder.writeString("mapU64Primative");
     encoder.writeMap(
       this.mapU64Primative,
-      (encoder: Encoder, key: u32): void => {
+      (encoder: Writer, key: u32): void => {
         encoder.writeUInt32(key);
       },
-      (encoder: Encoder, value: u64): void => {
+      (encoder: Writer, value: u64): void => {
         encoder.writeUInt64(value);
       }
     );
@@ -1040,7 +858,7 @@ export class Maps {
 
   toBuffer(): ArrayBuffer {
     let sizer = new Sizer();
-    this.size(sizer);
+    this.encode(sizer);
     let buffer = new ArrayBuffer(sizer.length);
     let encoder = new Encoder(buffer);
     this.encode(encoder);
@@ -1127,58 +945,30 @@ export class Lists {
     }
   }
 
-  size(sizer: Sizer): void {
-    sizer.writeMapSize(4);
-    sizer.writeString("listStrings");
-    sizer.writeArray(this.listStrings, (sizer: Sizer, item: string): void => {
-      sizer.writeString(item);
-    });
-    sizer.writeString("listU64s");
-    sizer.writeArray(this.listU64s, (sizer: Sizer, item: u64): void => {
-      sizer.writeUInt64(item);
-    });
-    sizer.writeString("listObjects");
-    sizer.writeArray(this.listObjects, (sizer: Sizer, item: Thing): void => {
-      item.size(sizer);
-    });
-    sizer.writeString("listObjectsOptional");
-    sizer.writeArray(
-      this.listObjectsOptional,
-      (sizer: Sizer, item: Thing | null): void => {
-        if (item === null) {
-          sizer.writeNil();
-        } else {
-          const unboxed = item;
-          unboxed.size(sizer);
-        }
-      }
-    );
-  }
-
-  encode(encoder: Encoder): void {
+  encode(encoder: Writer): void {
     encoder.writeMapSize(4);
     encoder.writeString("listStrings");
     encoder.writeArray(
       this.listStrings,
-      (encoder: Encoder, item: string): void => {
+      (encoder: Writer, item: string): void => {
         encoder.writeString(item);
       }
     );
     encoder.writeString("listU64s");
-    encoder.writeArray(this.listU64s, (encoder: Encoder, item: u64): void => {
+    encoder.writeArray(this.listU64s, (encoder: Writer, item: u64): void => {
       encoder.writeUInt64(item);
     });
     encoder.writeString("listObjects");
     encoder.writeArray(
       this.listObjects,
-      (encoder: Encoder, item: Thing): void => {
+      (encoder: Writer, item: Thing): void => {
         item.encode(encoder);
       }
     );
     encoder.writeString("listObjectsOptional");
     encoder.writeArray(
       this.listObjectsOptional,
-      (encoder: Encoder, item: Thing | null): void => {
+      (encoder: Writer, item: Thing | null): void => {
         if (item === null) {
           encoder.writeNil();
         } else {
@@ -1191,7 +981,7 @@ export class Lists {
 
   toBuffer(): ArrayBuffer {
     let sizer = new Sizer();
-    this.size(sizer);
+    this.encode(sizer);
     let buffer = new ArrayBuffer(sizer.length);
     let encoder = new Encoder(buffer);
     this.encode(encoder);
@@ -1263,13 +1053,7 @@ export class Thing {
     }
   }
 
-  size(sizer: Sizer): void {
-    sizer.writeMapSize(1);
-    sizer.writeString("value");
-    sizer.writeString(this.value);
-  }
-
-  encode(encoder: Encoder): void {
+  encode(encoder: Writer): void {
     encoder.writeMapSize(1);
     encoder.writeString("value");
     encoder.writeString(this.value);
@@ -1277,7 +1061,7 @@ export class Thing {
 
   toBuffer(): ArrayBuffer {
     let sizer = new Sizer();
-    this.size(sizer);
+    this.encode(sizer);
     let buffer = new ArrayBuffer(sizer.length);
     let encoder = new Encoder(buffer);
     this.encode(encoder);
